@@ -10,9 +10,10 @@ GRAVITY = 0.2
 
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT), HWSURFACE | DOUBLEBUF)
+pygame.font.init()
 clock = pygame.time.Clock()
 
-font = pygame.font.SysFont("comicsans", 64, True)
+font = pygame.font.SysFont("malgungothic", 64, True)
 inttup = lambda tup: tuple(map(int, tuple(tup)))
 
 star_img = pygame.image.load("star.png").convert_alpha()
@@ -74,7 +75,7 @@ class Confetti():
 
     def update(self):
         self.vel.y += GRAVITY * dt
-        self.vel *= 0.90
+        self.vel *= 0.855 + (48 - sum(self.size)) / 48 * 0.1
         self.pos += self.vel
         self.rot += self.rot_speed
         self.scale_counter += self.scale_speed
@@ -101,9 +102,9 @@ while running:
     screen.fill((220, 220, 220))
     current_confettis = sum([len(Confetti.instances[size]) for size in Confetti.instances])
     pygame.display.set_caption(f"Happy Birthday!!! | FPS: {round(clock.get_fps())} | Confettis: {current_confettis}")
-    text_surf = font.render("Happy Birthday Sandosh :D", True, (200, 0, 0))
-    surf_w, surf_h = text_surf.get_size()
-    screen.blit(text_surf, (WIDTH // 2 - surf_w // 2, HEIGHT // 3 - surf_h // 2))
+    # text_surf = font.render("妈妈生日快乐！！！", True, (200, 0, 0))
+    # surf_w, surf_h = text_surf.get_size()
+    # screen.blit(text_surf, (WIDTH // 2 - surf_w // 2, HEIGHT // 3 - surf_h // 2))
 
     for event in pygame.event.get():
         if event.type == QUIT:
