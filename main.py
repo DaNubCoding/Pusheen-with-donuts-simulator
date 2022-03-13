@@ -13,7 +13,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT), HWSURFACE | DOUBLEBUF)
 pygame.font.init()
 clock = pygame.time.Clock()
 
-font = pygame.font.SysFont("malgungothic", 64, True)
+font = pygame.font.Font("XiaolaiSC-Regular.ttf", 64)
 inttup = lambda tup: tuple(map(int, tuple(tup)))
 
 star_img = pygame.image.load("star.png").convert_alpha()
@@ -30,7 +30,7 @@ def fill(surface, color):
             a = surface.get_at((x, y))[3]
             surface.set_at((x, y), pygame.Color(r, g, b, a))
 
-class Confetti():
+class Confetti:
     instances = {}
 
     def __init__(self, pos, vel):
@@ -77,12 +77,15 @@ class Confetti():
         self.vel.y += GRAVITY * dt
         self.vel *= 0.855 + (48 - sum(self.size)) / 48 * 0.1
         self.pos += self.vel
+        self.animate()
+        self.kill(self.pos.y > HEIGHT or self.pos.x < -50 or self.pos.x > WIDTH + 50)
+        
+    def animate(self):
         self.rot += self.rot_speed
         self.scale_counter += self.scale_speed
         self.scale = (self.size.x / 2 * sin(self.scale_counter.x), self.size.y / 2 * sin(self.scale_counter.y)) + self.size * 0.75
         self.image = pygame.transform.rotate(pygame.transform.scale(self.orig_img, self.scale), self.rot)
         self.rect = self.image.get_rect(center=self.pos)
-        self.kill(self.pos.y > HEIGHT or self.pos.x < -50 or self.pos.x > WIDTH + 50)
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -102,9 +105,9 @@ while running:
     screen.fill((220, 220, 220))
     current_confettis = sum([len(Confetti.instances[size]) for size in Confetti.instances])
     pygame.display.set_caption(f"Happy Birthday!!! | FPS: {round(clock.get_fps())} | Confettis: {current_confettis}")
-    # text_surf = font.render("妈妈生日快乐！！！", True, (200, 0, 0))
-    # surf_w, surf_h = text_surf.get_size()
-    # screen.blit(text_surf, (WIDTH // 2 - surf_w // 2, HEIGHT // 3 - surf_h // 2))
+    text_surf = font.render("妈妈生日快乐！！！", True, (200, 0, 0))
+    surf_w, surf_h = text_surf.get_size()
+    screen.blit(text_surf, (WIDTH // 2 - surf_w // 2, HEIGHT // 3 - surf_h // 2))
 
     for event in pygame.event.get():
         if event.type == QUIT:
